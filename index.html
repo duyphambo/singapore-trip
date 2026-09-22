@@ -236,7 +236,7 @@ dialog::backdrop{background:rgba(10,15,12,.45)}
     </section>
     <div class="legend" id="legend"></div>
     <div id="days"></div>
-    <p class="foot">Chạm “Xong” ở mỗi chặng để đánh dấu đã đi. Chạm vào số tiền để ghi chi phí thực tế ngay tại đó. Giá ăn và taxi là dự toán cho cả nhóm. Tỷ giá tính 1 SGD = 21.000 đ.</p>
+    <p class="foot">Chạm “Xong” ở mỗi chặng để đánh dấu đã đi. Chạm vào số tiền để ghi chi phí thực tế — số này tự cộng vào đúng dòng trong tab Chi phí. Giá ăn và taxi là dự toán cho cả nhóm. Tỷ giá tính 1 SGD = 21.000 đ.</p>
   </section>
 
   <section id="panel-cost" hidden>
@@ -564,6 +564,30 @@ $("days").addEventListener("click",e=>{
 });
 
 /* cập nhật chi phí ngay trong lịch trình */
+// Nối mỗi chặng có phát sinh tiền với đúng dòng trong bảng "Theo dõi chi phí" (id cXX).
+const STOP_LINK = {
+  "0-0":"c04", "3-8":"c04",
+  "0-4":"c40", "3-6":"c40",
+  "0-7":"c41",
+  "1-1":"c42", "1-4":"c42", "1-5":"c42", "1-11":"c42",
+  "2-1":"c43", "2-9":"c43", "2-11":"c43", "2-13":"c43",
+  "3-5":"c44",
+  "0-12":"c10", "1-6":"c11", "2-2":"c12", "2-6":"c13", "2-12":"c14",
+  "0-3":"c20", "0-5":"c21", "0-11":"c22", "1-0":"c23", "1-3":"c24", "1-9":"c25",
+  "2-0":"c26", "2-7":"c27", "2-10":"c28", "3-1":"c29", "3-4":"c30"
+};
+const ROW_STOPS = {};
+Object.entries(STOP_LINK).forEach(([k,r])=>{ (ROW_STOPS[r] ||= []).push(k); });
+function computeRowActual(rowId){
+  return (ROW_STOPS[rowId]||[]).reduce((sum,k)=> sum + (stopCosts[k]?.actual || 0), 0);
+}
+function syncLinkedRow(key){
+  const rowId = STOP_LINK[key]; if(!rowId) return;
+  const total = computeRowActual(rowId);
+  const i = rows.findIndex(x=>x.id===rowId); if(i<0) return;
+  rows[i] = {...rows[i], actual: total, status: total>0 ? "tra" : "chua"};
+  save(KEY, rows); renderTracker();
+}
 const dlg2=$("dlg2");
 let editingStop=null;
 function updateConv2(){const v=toNum($("f2-actual").value);$("f2-conv").textContent=($("f2-unit").value==="sgd"&&v>0)?`≈ ${fmt(v*RATE)} đ`:"";}
@@ -571,7 +595,10 @@ $("f2-actual").addEventListener("input",updateConv2);$("f2-unit").addEventListen
 function openStopCost(key,label,planned){
   editingStop=key;
   $("f2-title").textContent="Chi phí: "+label;
-  $("f2-planned").textContent=planned?`Dự toán trong lịch: ${fmt(planned)} đ`:`Điểm này chưa có dự toán sẵn`;
+  let plannedTxt = planned?`Dự toán trong lịch: ${fmt(planned)} đ`:`Điểm này chưa có dự toán sẵn`;
+  const rowId = STOP_LINK[key];
+  if(rowId){ const row=rows.find(x=>x.id===rowId); plannedTxt += ` · số bạn nhập sẽ cộng vào dòng "${row?row.label:rowId}" trong tab Chi phí`; }
+  $("f2-planned").textContent = plannedTxt;
   const r=stopCosts[key];
   if(r&&r.actual){$("f2-actual").value=fmt(r.actual);$("f2-unit").value="vnd";}else{$("f2-actual").value="";$("f2-unit").value="sgd";}
   $("f2-note").value=r?.note||"";$("f2-del").hidden=!r;updateConv2();dlg2.showModal();
@@ -583,11 +610,11 @@ $("form2").addEventListener("submit",e=>{
   const note=$("f2-note").value.trim();
   if(actual===null||actual===0){ delete stopCosts[editingStop]; }
   else{ stopCosts[editingStop]={actual,note}; }
-  if(save(STOPKEY,stopCosts)){dlg2.close();renderDays();toast("Đã lưu");}
+  if(save(STOPKEY,stopCosts)){syncLinkedRow(editingStop);dlg2.close();renderDays();toast("Đã lưu");}
 });
 $("f2-del").addEventListener("click",()=>{
   if(!editingStop) return;
-  delete stopCosts[editingStop]; save(STOPKEY,stopCosts); dlg2.close(); renderDays();
+  delete stopCosts[editingStop]; save(STOPKEY,stopCosts); syncLinkedRow(editingStop); dlg2.close(); renderDays();
 });
 
 /* tabs */
