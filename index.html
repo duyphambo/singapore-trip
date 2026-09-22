@@ -43,6 +43,9 @@ button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .top{display:grid;gap:12px;margin-bottom:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.brandmark{width:46px;height:46px;border-radius:12px;flex:none}
+.brand .btext{display:grid;gap:2px;min-width:0}
 .eyebrow{font-size:13px;color:var(--ink3);font-weight:500}
 h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
 .who{color:var(--ink2);margin:0;max-width:64ch;font-size:15px}
@@ -92,6 +95,10 @@ nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:
 .walk{font-size:12px;color:var(--ink3)}
 .stop .cost{text-align:right;font-size:14px;font-weight:600;white-space:nowrap}
 .stop .cost small{display:block;font-weight:400;color:var(--ink3);font-size:11.5px}
+.costbtn{background:none;border:0;padding:0;margin:0;text-align:right;cursor:pointer;color:inherit;display:block;width:100%;font:inherit}
+.costbtn .actual{display:block;margin-top:3px;font-size:12.5px}
+.costbtn .actual .diff{margin-left:4px}
+.costhint{font-size:11px;color:var(--ink3);font-weight:400;display:block;margin-top:2px}
 .free{color:var(--good);font-weight:600}
 .tip{grid-column:2/-1;font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:8px;padding:7px 10px;margin-top:4px}
 .tick{border:1px solid var(--rule);background:var(--card);border-radius:8px;padding:3px 9px;font-size:12px;color:var(--ink2)}
@@ -176,8 +183,13 @@ dialog::backdrop{background:rgba(10,15,12,.45)}
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="eyebrow">Thứ Bảy 21/11 – Thứ Ba 24/11/2026 · Khách sạn Mercure Singapore Tyrwhitt, 165 Tyrwhitt Rd · nhận phòng 15:00, trả phòng 12:00</div>
-    <h1>Singapore, cả nhà 8 người</h1>
+    <div class="brand">
+      <img class="brandmark" src="data:image/png;base64,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" alt="" width="46" height="46">
+      <div class="btext">
+        <div class="eyebrow">Thứ Bảy 21/11 – Thứ Ba 24/11/2026 · Khách sạn Mercure Singapore Tyrwhitt, 165 Tyrwhitt Rd · nhận phòng 15:00, trả phòng 12:00</div>
+        <h1>Singapore, cả nhà 8 người</h1>
+      </div>
+    </div>
     <p class="who">5 người lớn, hai bé 9 và 11 tuổi, bé 3 tuổi. Mỗi ngày đi bộ khoảng 2 km, có xe lăn gấp gọn theo cả chuyến. Chiều ngày 1 thuê xe 13 chỗ chờ sẵn; các chặng khác gọi <b>taxi</b>, không gọi Grab xe thường.</p>
     <div class="flights">
       <div class="flight"><div class="code">SGN</div><div class="mid"><b>SQ187 · 05:55</b>2g10p · 737 MAX 8</div><div class="code">SIN</div>
@@ -224,7 +236,7 @@ dialog::backdrop{background:rgba(10,15,12,.45)}
     </section>
     <div class="legend" id="legend"></div>
     <div id="days"></div>
-    <p class="foot">Chạm “Xong” ở mỗi chặng để đánh dấu đã đi. Giá ăn và taxi là dự toán cho cả nhóm. Tỷ giá tính 1 SGD = 21.000 đ.</p>
+    <p class="foot">Chạm “Xong” ở mỗi chặng để đánh dấu đã đi. Chạm vào số tiền để ghi chi phí thực tế ngay tại đó. Giá ăn và taxi là dự toán cho cả nhóm. Tỷ giá tính 1 SGD = 21.000 đ.</p>
   </section>
 
   <section id="panel-cost" hidden>
@@ -288,6 +300,21 @@ dialog::backdrop{background:rgba(10,15,12,.45)}
     <div class="dlgfoot">
       <button type="button" class="danger" id="f-del">Xóa khoản này</button>
       <div class="right"><button type="button" class="ghost" id="f-cancel">Hủy</button><button type="submit" class="primary">Lưu</button></div>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg2">
+  <form class="dlg" id="form2" method="dialog">
+    <h3 id="f2-title">Cập nhật chi phí</h3>
+    <p class="hint" id="f2-planned"></p>
+    <div class="field"><label for="f2-actual">Thực chi</label>
+      <div class="amt"><input id="f2-actual" inputmode="decimal" placeholder="Để trống nếu chưa chi"><select id="f2-unit" aria-label="Đơn vị"><option value="sgd">SGD</option><option value="vnd">VNĐ</option></select></div>
+      <span class="hint" id="f2-conv"></span></div>
+    <div class="field"><label for="f2-note">Ghi chú</label><input id="f2-note" placeholder="Vd: mua thêm suất, giá tăng..."></div>
+    <div class="dlgfoot">
+      <button type="button" class="danger" id="f2-del">Xóa</button>
+      <div class="right"><button type="button" class="ghost" id="f2-cancel">Hủy</button><button type="submit" class="primary">Lưu</button></div>
     </div>
   </form>
 </dialog>
@@ -459,6 +486,8 @@ else { // cập nhật dự toán mới cho các khoản chưa nhập thực chi
 let done = load(DONEKEY,{});
 const CKKEY = "sg-trip-checklist-v1";
 let ckState = load(CKKEY,{});
+const STOPKEY = "sg-trip-stopcost-v1";
+let stopCosts = load(STOPKEY,{});
 if(navigator.storage && navigator.storage.persist){navigator.storage.persist().catch(()=>{});}
 
 /* checklist */
@@ -496,6 +525,13 @@ function rhythmHTML(r,first){
   <div class="rticks">${[3,6,9,12,15,18,21].map(h=>`<span style="left:${pct(h)}%">${h}h</span>`).join("")}</div>
   ${first?`<div class="rkey"><span><i style="background:var(--b-out)"></i>Ra ngoài</span><span><i style="background:var(--b-rest)"></i>Nghỉ ở khách sạn</span><span><i style="background:var(--b-fly)"></i>Bay</span><span><i style="background:var(--b-move)"></i>Sân bay, chờ</span></div>`:""}</div>`;
 }
+function stopCostHTML(key, planned){
+  const r = stopCosts[key]; if(!r || !r.actual) return "";
+  const diff = r.actual - planned;
+  const cls = diff>0?"over":diff<0?"under":"";
+  const sign = diff>0?"+":diff<0?"−":"";
+  return `<span class="actual num">Thực chi ${fmt(r.actual)}${planned?`<span class="diff ${cls}">${sign}${fmt(Math.abs(diff))}</span>`:""}</span>`;
+}
 function renderDays(){
   $("days").innerHTML = DAYS.map((day,i)=>{
     if(dayFilter!=="all" && dayFilter!==String(i)) return "";
@@ -503,7 +539,7 @@ function renderDays(){
     const list=day.stops.map((s,j)=>{
       const [t,title,desc,mode,mc,sc,km,tip,isRest,dur,photo]=s; move+=mc; spend+=sc; walk+=km;
       const key=i+"-"+j, isDone=!!done[key], [ml,mcls]=MODES[mode], total=mc+sc;
-      const cost = total?`<span class="num">${fmt(total)}</span>`:(/miễn phí/i.test(desc)?`<span class="free">Miễn phí</span>`:"");
+      const cost = total?`<span class="num">${fmt(total)}</span>`:(/miễn phí/i.test(desc)?`<span class="free">Miễn phí</span>`:"<span class=\"costhint\">Ghi chi phí</span>");
       const sub=(mc&&sc)?`<small class="num">xe ${fmt(mc)} · ${fmt(sc)}</small>`:"";
       return `<div class="stop${isRest?" rest":""}${isDone?" done":""}">
         <div class="t num">${t}</div>
@@ -511,7 +547,7 @@ function renderDays(){
           <div class="meta"><span class="chip ${mcls}">${ml}</span>${dur?`<span class="stay num">Dừng ${dur}</span>`:""}${km?`<span class="walk num">đi bộ ${km.toLocaleString("vi-VN")} km</span>`:""}
           <button class="tick" data-key="${key}">${isDone?"✓ Đã xong":"Xong"}</button></div>
           ${photo?`<p class="photo"><b>Chụp ảnh:</b> ${esc(photo)}</p>`:""}</div>
-        <div class="cost">${cost}${sub}</div>
+        <div class="cost"><button type="button" class="costbtn" data-key="${key}" data-planned="${total}" data-label="${esc(title)}">${cost}${sub}${stopCostHTML(key,total)}</button></div>
         ${tip?`<div class="tip">${esc(tip)}</div>`:""}</div>`;
     }).join("");
     return `<article class="day"><div class="dayhead"><h2>${day.n} · ${esc(day.area)}</h2><span class="d">${day.d}</span></div>
@@ -520,7 +556,39 @@ function renderDays(){
       <div class="stops">${list}<div class="daytotal"><span>Cộng ${day.n.toLowerCase()}</span><span class="num">${fmt(move+spend+day.snack)} đ</span></div></div></article>`;
   }).join("");
 }
-$("days").addEventListener("click",e=>{const b=e.target.closest(".tick");if(!b)return;const k=b.dataset.key;done[k]=!done[k];if(!done[k])delete done[k];save(DONEKEY,done);renderDays();});
+$("days").addEventListener("click",e=>{
+  const tick=e.target.closest(".tick");
+  if(tick){const k=tick.dataset.key;done[k]=!done[k];if(!done[k])delete done[k];save(DONEKEY,done);renderDays();return;}
+  const cb=e.target.closest(".costbtn");
+  if(cb){openStopCost(cb.dataset.key,cb.dataset.label,+cb.dataset.planned);}
+});
+
+/* cập nhật chi phí ngay trong lịch trình */
+const dlg2=$("dlg2");
+let editingStop=null;
+function updateConv2(){const v=toNum($("f2-actual").value);$("f2-conv").textContent=($("f2-unit").value==="sgd"&&v>0)?`≈ ${fmt(v*RATE)} đ`:"";}
+$("f2-actual").addEventListener("input",updateConv2);$("f2-unit").addEventListener("change",updateConv2);
+function openStopCost(key,label,planned){
+  editingStop=key;
+  $("f2-title").textContent="Chi phí: "+label;
+  $("f2-planned").textContent=planned?`Dự toán trong lịch: ${fmt(planned)} đ`:`Điểm này chưa có dự toán sẵn`;
+  const r=stopCosts[key];
+  if(r&&r.actual){$("f2-actual").value=fmt(r.actual);$("f2-unit").value="vnd";}else{$("f2-actual").value="";$("f2-unit").value="sgd";}
+  $("f2-note").value=r?.note||"";$("f2-del").hidden=!r;updateConv2();dlg2.showModal();
+}
+$("f2-cancel").addEventListener("click",()=>dlg2.close());
+$("form2").addEventListener("submit",e=>{
+  e.preventDefault();
+  let actual=toNum($("f2-actual").value); if(actual!==null&&$("f2-unit").value==="sgd") actual=Math.round(actual*RATE);
+  const note=$("f2-note").value.trim();
+  if(actual===null||actual===0){ delete stopCosts[editingStop]; }
+  else{ stopCosts[editingStop]={actual,note}; }
+  if(save(STOPKEY,stopCosts)){dlg2.close();renderDays();toast("Đã lưu");}
+});
+$("f2-del").addEventListener("click",()=>{
+  if(!editingStop) return;
+  delete stopCosts[editingStop]; save(STOPKEY,stopCosts); dlg2.close(); renderDays();
+});
 
 /* tabs */
 function showTab(id){["tab-plan","tab-cost","tab-checklist"].forEach(t=>$(t).setAttribute("aria-selected",t===id));$("panel-plan").hidden=id!=="tab-plan";$("panel-cost").hidden=id!=="tab-cost";$("panel-checklist").hidden=id!=="tab-checklist";try{localStorage.setItem("sg-tab",id);}catch(e){}}
