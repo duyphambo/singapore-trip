@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Singapore 21–24/11</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Singapore">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F4F6F3" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1412" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --ground:#F4F6F3; --card:#FFFFFF; --sunk:#EBEFEA; --ink:#15201B; --ink2:#48554F; --ink3:#7E8A84;
+  --rule:#DDE3DE; --accent:#C8102E; --accent-ink:#FFFFFF;
+  --good:#1E7A46; --good-bg:#E3F2E8; --warn:#9A5B00; --warn-bg:#FBEFD9; --bad:#B42318; --bad-bg:#FCE7E4;
+  --m-fly:#3B5BDB; --m-car:#5B6770; --m-maxi:#C2570C; --m-taxi:#A77A00; --m-walk:#2F8A4E;
+  --m-boat:#0F7C8C; --m-cable:#B0287A; --m-bus:#2C6FB7; --m-van:#6D3FC0; --m-rest:#8A958F;
+  --b-out:#E9A23B; --b-rest:#9DBFAA; --b-fly:#7C93E6; --b-move:#C8CFCA;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ground:#0F1412; --card:#171E1B; --sunk:#1E2723; --ink:#E9EFEB; --ink2:#AEB9B3; --ink3:#7C8882;
+    --rule:#2A3430; --accent:#FF5A6E; --accent-ink:#1A0005;
+    --good:#6BD294; --good-bg:#15301F; --warn:#F2BE62; --warn-bg:#33260F; --bad:#FF8A7A; --bad-bg:#3A1714;
+    --m-fly:#8FA5FF; --m-car:#A7B3BB; --m-maxi:#FF9A5C; --m-taxi:#E8C04A; --m-walk:#6FCB8E;
+    --m-boat:#4FC7D6; --m-cable:#F27AC3; --m-bus:#76AEEB; --m-van:#B494F2; --m-rest:#8E9A94;
+    --b-out:#C98A2E; --b-rest:#4E7A60; --b-fly:#5068C8; --b-move:#3A4540;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--ground);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:900px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px));padding-block:16px 60px}
+h1,h2,h3{margin:0;text-wrap:balance}
+.num{font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{display:grid;gap:12px;margin-bottom:12px}
+.eyebrow{font-size:13px;color:var(--ink3);font-weight:500}
+h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.who{color:var(--ink2);margin:0;max-width:64ch;font-size:15px}
+.flights{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.flight{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;align-items:center}
+.flight .code{font-weight:800;font-size:20px}
+.flight .mid{color:var(--ink3);font-size:12px;text-align:center;line-height:1.3}
+.flight .mid b{display:block;color:var(--ink);font-size:13px}
+.flight .foot{grid-column:1/-1;font-size:12.5px;color:var(--ink2);border-top:1px dashed var(--rule);padding-top:7px;margin-top:4px}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--ground);padding-block:10px;display:flex;gap:6px;border-bottom:1px solid var(--rule);margin-bottom:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--rule);background:var(--card);border-radius:999px;padding:9px 18px;font-weight:600;font-size:15px;color:var(--ink2)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.offline{margin-left:auto;align-self:center;font-size:12px;color:var(--ink3)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.chip{--c:var(--m-rest);display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px 3px 7px;border-radius:999px;color:var(--c);background:var(--sunk);white-space:nowrap}
+@supports (background:color-mix(in srgb,red 10%,transparent)){.chip{background:color-mix(in srgb,var(--c) 13%,transparent)}}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+.m-fly{--c:var(--m-fly)}.m-car{--c:var(--m-car)}.m-maxi{--c:var(--m-maxi)}.m-taxi{--c:var(--m-taxi)}.m-walk{--c:var(--m-walk)}
+.m-boat{--c:var(--m-boat)}.m-cable{--c:var(--m-cable)}.m-bus{--c:var(--m-bus)}.m-van{--c:var(--m-van)}.m-rest{--c:var(--m-rest)}
+
+.daynav{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
+.dbtn{border:1px solid var(--rule);background:var(--card);border-radius:10px;padding:7px 12px;font-size:14px;font-weight:600;color:var(--ink2)}
+.dbtn[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--sunk)}
+.day{margin-top:24px}
+.dayhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.dayhead h2{font-size:22px;font-weight:800}
+.dayhead .d{color:var(--ink3);font-size:14px}
+.daystats{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--ink2);margin:6px 0 10px}
+.daystats b{color:var(--ink)}
+.rbar{position:relative;height:14px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.rbar span{position:absolute;top:0;bottom:0}
+.rticks{position:relative;height:16px;font-size:10.5px;color:var(--ink3)}
+.rticks span{position:absolute;transform:translateX(-50%);top:2px}
+.rkey{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:var(--ink3)}
+.rkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.stops{background:var(--card);border:1px solid var(--rule);border-radius:14px;overflow:hidden;margin-top:10px}
+.stop{display:grid;grid-template-columns:92px 1fr auto;gap:4px 14px;padding:12px 16px;border-top:1px solid var(--rule)}
+.stop:first-child{border-top:0}
+.stop.rest{background:var(--sunk)}
+.stop.done{opacity:.5}
+.stop .t{font-weight:700;font-size:14px}
+.stop .what h3{font-size:16px;font-weight:600;line-height:1.35}
+.stop .what p{margin:2px 0 0;color:var(--ink2);font-size:14px}
+.stop .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;align-items:center}
+.walk{font-size:12px;color:var(--ink3)}
+.stop .cost{text-align:right;font-size:14px;font-weight:600;white-space:nowrap}
+.stop .cost small{display:block;font-weight:400;color:var(--ink3);font-size:11.5px}
+.free{color:var(--good);font-weight:600}
+.tip{grid-column:2/-1;font-size:13px;color:var(--warn);background:var(--warn-bg);border-radius:8px;padding:7px 10px;margin-top:4px}
+.tick{border:1px solid var(--rule);background:var(--card);border-radius:8px;padding:3px 9px;font-size:12px;color:var(--ink2)}
+.stop.done .tick{background:var(--good-bg);color:var(--good);border-color:transparent}
+.daytotal{display:flex;justify-content:space-between;padding:10px 16px;background:var(--sunk);font-size:14px;font-weight:600}
+@media (max-width:560px){.stop{grid-template-columns:1fr auto}.stop .t{grid-column:1/-1}.tip{grid-column:1/-1}}
+
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0 12px}
+.sum{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:11px 13px}
+.sum small{display:block;color:var(--ink3);font-size:12px}
+.sum b{font-size:20px;font-weight:800}
+.sum.hl b{color:var(--good)} .sum.neg b{color:var(--bad)}
+@media (max-width:640px){.summary{grid-template-columns:1fr 1fr}}
+.mbar{display:flex;height:16px;border-radius:5px;overflow:hidden;background:var(--sunk)}
+.mbar span{height:100%}
+.mkey{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--ink2);margin-top:6px}
+.mkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin:18px 0 8px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fbtn{border:1px solid var(--rule);background:var(--card);border-radius:999px;padding:7px 13px;font-size:14px;font-weight:600;color:var(--ink2)}
+.fbtn[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);background:var(--sunk)}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:10px 15px;font-weight:700}
+.ghost{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 15px;font-weight:600}
+.cat{margin-top:16px}
+.cathead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:0 2px 6px;flex-wrap:wrap}
+.cathead h3{font-size:17px;font-weight:700}
+.cathead span{font-size:13px;color:var(--ink2)}
+.tbl{background:var(--card);border:1px solid var(--rule);border-radius:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:560px;table-layout:fixed}
+th:nth-child(2),th:nth-child(3){width:118px} th:nth-child(4){width:100px} th:nth-child(5){width:104px}
+th,td{padding:11px 12px;text-align:left;border-top:1px solid var(--rule);font-size:14px;vertical-align:top}
+thead th{border-top:0;font-size:11.5px;color:var(--ink3);font-weight:600;letter-spacing:.03em;text-transform:uppercase;background:var(--sunk)}
+td.r,th.r{text-align:right}
+tbody tr{cursor:pointer} tbody tr:active{background:var(--sunk)}
+td .note{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.s-chua{background:var(--sunk);color:var(--ink2)} .s-dat{background:var(--warn-bg);color:var(--warn)} .s-tra{background:var(--good-bg);color:var(--good)}
+.over{color:var(--bad);font-weight:600}.under{color:var(--good);font-weight:600}
+.backup{margin-top:28px;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.backup h3{font-size:16px}
+.backup p{margin:0;color:var(--ink2);font-size:14px}
+.backup .btns{display:flex;flex-wrap:wrap;gap:8px}
+.foot{margin-top:24px;font-size:12.5px;color:var(--ink3);max-width:70ch}
+
+dialog{border:1px solid var(--rule);border-radius:16px;background:var(--card);color:var(--ink);padding:0;width:min(500px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(10,15,12,.45)}
+.dlg{padding:18px;display:grid;gap:12px}
+.dlg h3{font-size:19px}
+.field{display:grid;gap:4px}
+.field label{font-size:13px;color:var(--ink2);font-weight:600}
+.field input,.field select,.field textarea{padding:10px 11px;border-radius:9px;border:1px solid var(--rule);background:var(--ground);width:100%;font-size:16px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.amt{display:grid;grid-template-columns:1fr 96px;gap:6px}
+.hint{font-size:12.5px;color:var(--ink3);min-height:1em}
+.dlgfoot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px}
+.dlgfoot .right{display:flex;gap:8px}
+.danger{background:transparent;border:0;color:var(--bad);font-weight:600;padding:9px 4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600;z-index:50}
+.cover{margin-top:18px}
+.cover h2{font-size:20px;font-weight:800}
+.coverlead{color:var(--ink2);margin:4px 0 10px;max-width:66ch}
+.covt{min-width:520px}
+.covt tbody tr{cursor:default}
+.covt td:last-child,.covt th:last-child{text-align:right;white-space:nowrap}
+.covt .pill{margin-right:6px}
+.stay{font-size:12px;font-weight:700;color:var(--ink);background:var(--sunk);border-radius:6px;padding:2px 8px}
+.photo{margin:6px 0 0;font-size:13px;color:var(--ink2);padding-left:10px;border-left:2px solid var(--m-cable)}
+.photo b{color:var(--m-cable);font-weight:600}
+.cprog{display:flex;align-items:center;gap:12px;margin:6px 0 16px;font-size:14px;color:var(--ink2)}
+.cprogbar{flex:1;height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.cprogbar span{display:block;height:100%;background:var(--good)}
+.clist{background:var(--card);border:1px solid var(--rule);border-radius:12px;overflow:hidden}
+.citem{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-top:1px solid var(--rule)}
+.citem:first-child{border-top:0}
+.citem input[type="checkbox"]{margin-top:3px;width:20px;height:20px;accent-color:var(--accent);flex:none}
+.citem .ctext{flex:1}
+.citem .ctext b{font-weight:600;font-size:15px}
+.citem.done .ctext b{color:var(--ink3);text-decoration:line-through}
+.citem .ctext p{margin:2px 0 0;color:var(--ink2);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Thứ Bảy 21/11 – Thứ Ba 24/11/2026 · Khách sạn Mercure Singapore Tyrwhitt, 165 Tyrwhitt Rd · nhận phòng 15:00, trả phòng 12:00</div>
+    <h1>Singapore, cả nhà 8 người</h1>
+    <p class="who">5 người lớn, hai bé 9 và 11 tuổi, bé 3 tuổi. Mỗi ngày đi bộ khoảng 2 km, có xe lăn gấp gọn theo cả chuyến. Chiều ngày 1 thuê xe 13 chỗ chờ sẵn; các chặng khác gọi <b>taxi</b>, không gọi Grab xe thường.</p>
+    <div class="flights">
+      <div class="flight"><div class="code">SGN</div><div class="mid"><b>SQ187 · 05:55</b>2g10p · 737 MAX 8</div><div class="code">SIN</div>
+        <div class="foot">Đến 09:05 · Ghế 55A–57C · Có mặt Tân Sơn Nhất T2 lúc 03:15</div></div>
+      <div class="flight"><div class="code">SIN</div><div class="mid"><b>SQ186 · 17:30</b>2g10p · 787-10</div><div class="code">SGN</div>
+        <div class="foot">Đến 18:40 · Ghế 64A–66C · Có mặt Changi T2 lúc 14:30</div></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Phần">
+    <button class="tab" role="tab" id="tab-plan" aria-selected="true">Lịch trình</button>
+    <button class="tab" role="tab" id="tab-cost" aria-selected="false">Chi phí</button>
+    <button class="tab" role="tab" id="tab-checklist" aria-selected="false">Checklist</button>
+    <span class="offline" id="netstate"></span>
+  </nav>
+
+  <section id="panel-plan">
+    <div class="daynav" id="daynav"></div>
+    <section class="cover" id="cover">
+      <h2>Đối chiếu với chương trình tour</h2>
+      <p class="coverlead">Đủ 15/18 điểm của tour NNSGN193, mỗi ngày đi bộ khoảng 2 km. Bỏ 2 điểm mua sắm và Marina Barrage, đổi lẩu Sukiya sang Hi Hot Pot, thêm Oceanarium và Phật Nha Tự.</p>
+      <div class="tbl"><table class="covt"><thead><tr><th>Điểm trong tour</th><th>Lịch nhà mình</th><th>Dừng</th></tr></thead><tbody>
+        <tr><td>Jewel Changi · Rain Vortex</td><td><span class="pill s-tra">Có</span> Ngày 1, 09:45</td><td>1g15</td></tr>
+        <tr><td>Parliament House · Victoria</td><td><span class="pill s-tra">Có</span> Ngày 1, 16:15, xe thả tận nơi</td><td>15 phút</td></tr>
+        <tr><td>Merlion Park</td><td><span class="pill s-tra">Có</span> Ngày 1, 16:35, xe thả tận nơi</td><td>30 phút</td></tr>
+        <tr><td>Esplanade</td><td><span class="pill s-tra">Có</span> Ngày 1, 17:10, xe thả tận nơi</td><td>20 phút</td></tr>
+        <tr><td>Bữa tối nhà hàng địa phương</td><td><span class="pill s-tra">Có</span> Rasapura Masters</td><td>1 tiếng</td></tr>
+        <tr><td>Kampong Glam · Haji Lane</td><td><span class="pill s-tra">Có</span> Ngày 2, 09:00</td><td>1g10</td></tr>
+        <tr><td>Oil Shop · Natural Stone Gallery</td><td><span class="pill s-chua">Bỏ</span> Điểm bán hàng của tour</td><td>—</td></tr>
+        <tr><td>Lẩu Sukiya Nhật Bản</td><td><span class="pill s-dat">Đổi</span> Lẩu Hi Hot Pot (hệ thống Haidilao), ngày 3</td><td>1g15</td></tr>
+        <tr><td>Marina Barrage · Sustainable Singapore Gallery</td><td><span class="pill s-chua">Bỏ</span> Để giữ mức đi bộ khoảng 2 km</td><td>—</td></tr>
+        <tr><td>Gardens by the Bay · siêu cây</td><td><span class="pill s-tra">Có</span> Ngày 2, 19:45, kèm show đèn</td><td>15 phút</td></tr>
+        <tr><td>Cloud Forest · Jurassic World</td><td><span class="pill s-tra">Có</span> Ngày 2, 16:15</td><td>1g15</td></tr>
+        <tr><td>Flower Dome</td><td><span class="pill s-tra">Có</span> Ngày 2, 17:35</td><td>45 phút</td></tr>
+        <tr><td>Bak Kut Teh</td><td><span class="pill s-tra">Có</span> Ng Ah Sio, trưa ngày 2</td><td>1 tiếng</td></tr>
+        <tr><td>Mount Faber</td><td><span class="pill s-tra">Có</span> Lên đỉnh bằng cáp treo, ngày 3</td><td>25 phút</td></tr>
+        <tr><td>Sensoryscape</td><td><span class="pill s-tra">Có</span> Ngày 3, 10:10</td><td>20 phút</td></tr>
+        <tr><td>Quả cầu Universal</td><td><span class="pill s-tra">Có</span> Ngày 3, 13:30</td><td>15 phút</td></tr>
+        <tr><td>Sentosa Choice Pass</td><td><span class="pill s-tra">Có</span> Wings of Time suất 19:40</td><td>25 phút</td></tr>
+        <tr><td>Oceanarium (tour để tự túc)</td><td><span class="pill s-tra">Có</span> Ngày 3, 10:40</td><td>2 tiếng</td></tr>
+        <tr><td>Chinatown</td><td><span class="pill s-tra">Có</span> Ngày 4, 10:30</td><td>45 phút</td></tr>
+        <tr><td>Phật Nha Tự (tour bị cắt vì bay về sớm)</td><td><span class="pill s-tra">Có</span> Ngày 4, 09:45</td><td>45 phút</td></tr>
+      </tbody></table></div>
+    </section>
+    <div class="legend" id="legend"></div>
+    <div id="days"></div>
+    <p class="foot">Chạm “Xong” ở mỗi chặng để đánh dấu đã đi. Giá ăn và taxi là dự toán cho cả nhóm. Tỷ giá tính 1 SGD = 21.000 đ.</p>
+  </section>
+
+  <section id="panel-cost" hidden>
+    <div class="summary">
+      <div class="sum"><small>Ngân sách</small><b class="num" id="s-budget">—</b></div>
+      <div class="sum"><small>Dự toán</small><b class="num" id="s-plan">—</b></div>
+      <div class="sum"><small>Đã chi</small><b class="num" id="s-spent">—</b></div>
+      <div class="sum hl" id="s-leftbox"><small>Dự kiến còn dư</small><b class="num" id="s-left">—</b></div>
+    </div>
+    <div class="mbar" id="mbar"></div>
+    <div class="mkey">
+      <span><i style="background:var(--good)"></i>Đã chi</span>
+      <span><i style="background:var(--b-out)"></i>Còn phải chi</span>
+      <span><i style="background:var(--sunk);border:1px solid var(--rule)"></i>Dư</span>
+    </div>
+    <div class="toolbar">
+      <div class="filters" role="group" aria-label="Lọc">
+        <button class="fbtn" data-f="all" aria-pressed="true">Tất cả</button>
+        <button class="fbtn" data-f="chua" aria-pressed="false">Chưa chi</button>
+        <button class="fbtn" data-f="dat" aria-pressed="false">Đã đặt</button>
+        <button class="fbtn" data-f="tra" aria-pressed="false">Đã trả</button>
+      </div>
+      <button class="primary" id="add">+ Thêm khoản phát sinh</button>
+    </div>
+    <div id="tracker"></div>
+
+    <div class="backup">
+      <h3>Sao lưu dữ liệu</h3>
+      <p>Dữ liệu chỉ nằm trên máy này. Mỗi tối nên bấm “Sao lưu” và lưu vào Tệp hoặc gửi qua Zalo, phòng khi đổi máy hay lỡ xóa ứng dụng.</p>
+      <div class="btns">
+        <button class="ghost" id="b-export">Sao lưu</button>
+        <button class="ghost" id="b-csv">Xuất bảng CSV</button>
+        <button class="ghost" id="b-import">Khôi phục từ bản sao lưu</button>
+        <input type="file" id="f-import" accept=".json,application/json" hidden>
+        <button class="danger" id="b-reset">Đặt lại về dự toán gốc</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-checklist" hidden>
+    <div class="cprog"><span>Đã chuẩn bị</span><div class="cprogbar" id="k-bar"><span></span></div><span class="num" id="k-count">0/0</span></div>
+    <div id="checklist"></div>
+    <p class="foot">Chạm vào từng dòng để đánh dấu đã chuẩn bị xong. Trạng thái lưu ngay trên máy này.</p>
+  </section>
+</div>
+
+<dialog id="dlg">
+  <form class="dlg" id="form" method="dialog">
+    <h3 id="f-title">Sửa khoản chi</h3>
+    <div class="field"><label for="f-label">Tên khoản</label><input id="f-label" required></div>
+    <div class="row2">
+      <div class="field"><label for="f-cat">Nhóm</label><select id="f-cat"></select></div>
+      <div class="field"><label for="f-status">Trạng thái</label>
+        <select id="f-status"><option value="chua">Chưa chi</option><option value="dat">Đã đặt</option><option value="tra">Đã trả</option></select></div>
+    </div>
+    <div class="field"><label for="f-planned">Dự toán (VNĐ)</label><input id="f-planned" inputmode="numeric"></div>
+    <div class="field"><label for="f-actual">Thực chi</label>
+      <div class="amt"><input id="f-actual" inputmode="decimal" placeholder="Để trống nếu chưa chi"><select id="f-unit" aria-label="Đơn vị"><option value="sgd">SGD</option><option value="vnd">VNĐ</option></select></div>
+      <span class="hint" id="f-conv"></span></div>
+    <div class="field"><label for="f-note">Ghi chú</label><input id="f-note"></div>
+    <div class="dlgfoot">
+      <button type="button" class="danger" id="f-del">Xóa khoản này</button>
+      <div class="right"><button type="button" class="ghost" id="f-cancel">Hủy</button><button type="submit" class="primary">Lưu</button></div>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const RATE = 21000, BUDGET = 160000000, KEY = "sg-trip-costs-v1", DONEKEY = "sg-trip-done-v1";
+const MODES = {
+  fly:["Máy bay","m-fly"], car:["Xe riêng TP.HCM","m-car"], maxi:["MaxiCab","m-maxi"], taxi:["Taxi 2 xe","m-taxi"],
+  walk:["Đi bộ","m-walk"], boat:["Du thuyền","m-boat"], cable:["Cáp treo","m-cable"], van:["Xe 13 chỗ chờ sẵn","m-van"], bus:["Xe nội khu miễn phí","m-bus"], rest:["Nghỉ","m-rest"]
+};
+const DAYS = [
+ {n:"Ngày 1", d:"Thứ Bảy 21/11", date:"2026-11-21", area:"Jewel và khu trung tâm Marina Bay", snack:840000,
+  rhythm:[[2.5,5.92,"move"],[5.92,9.08,"fly"],[9.08,13,"out"],[13,16,"rest"],[16,20.75,"out"]],
+  stops:[
+   ["02:30","Rời nhà ra Tân Sơn Nhất","Xe 16 chỗ cho 8 người và vali","car",600000,0,0,"Cho bé ngủ tiếp trên xe.",false,"",""],
+   ["05:55","Bay SQ187","Hạ cánh Changi 09:05","fly",0,0,0,"",false,"",""],
+   ["09:05","Nhập cảnh, lấy hành lý","Changi T3","walk",0,0,0.3,"Đã báo Singapore Airlines hỗ trợ xe lăn miễn phí: nhân viên đẩy mẹ từ cửa máy bay qua nhập cảnh.",false,"40 phút",""],
+   ["09:45","Jewel Changi · Rain Vortex","Ăn sáng ở khu ẩm thực tầng B2","walk",0,1260000,0.3,"Đi thang máy giữa các tầng, nhiều ghế ngồi quanh thác.",false,"1g15","Thác Rain Vortex nhìn từ tầng 1; cả nhà trước thác"],
+   ["11:15","Xe 13 chỗ về Mercure Tyrwhitt","Khoảng 20 phút, tài xế đón ở sảnh đến","van",1575000,0,0,"Nhận phòng chính thức từ 15:00. Email khách sạn xin nhận sớm; nếu chưa có phòng thì gửi đồ, ăn trưa rồi ngồi nghỉ ở sảnh hoặc hồ bơi sân thượng.",false,"",""],
+   ["12:15","Ăn trưa quán ăn 290 Jalan Besar","Cách khách sạn khoảng 250 m: mì bò Hwa Heng, cơm, mì","walk",0,1428000,0.3,"",false,"45 phút",""],
+   ["13:00","Ngủ trưa ở khách sạn","Đến 16:00","rest",0,0,0,"Cả nhà dậy từ 2 giờ sáng. Đừng cắt khoảng này.",true,"3 tiếng",""],
+   ["16:00","Xe 13 chỗ chờ sẵn cả buổi","Đón ở sảnh khách sạn, chở qua từng điểm đến 20:45","van",6300000,0,0,"Xe lăn gấp gọn để trong cốp, ai mệt thì ngồi.",false,"",""],
+   ["16:15","Tòa Nhà Quốc Hội cũ · Nhà hát Victoria","Xe thả ở Empress Place, miễn phí","van",0,0,0.2,"",false,"15 phút","Mặt tiền trắng Nhà hát Victoria và tháp đồng hồ; tượng Raffles bên bờ sông"],
+   ["16:35","Công viên Merlion","Xe thả ở One Fullerton, đi khoảng 150 m tới tượng","van",0,0,0.2,"Lối từ One Fullerton bằng phẳng, không phải xuống bậc bờ sông.",false,"30 phút","Tượng Merlion phun nước với Marina Bay Sands phía sau; kiểu chụp “hứng nước”"],
+   ["17:10","Nhà hát Esplanade","Xe chở sang, thả trước nhà hát","van",0,0,0.2,"",false,"20 phút","Mái “trái sầu riêng”; bậc Outdoor Theatre nhìn sang Marina Bay Sands"],
+   ["17:40","Marina Bay Sands · ăn tối Rasapura Masters","Xe thả ở sảnh B1 The Shoppes","van",0,2310000,0.2,"Có ghế cao cho bé, không cần đặt bàn.",false,"1 tiếng",""],
+   ["18:45","Du thuyền sông Singapore","Bến ngay trước MBS, 40 phút","boat",0,4074000,0.1,"",false,"40 phút","Merlion và Clarke Quay lúc lên đèn, chụp từ đuôi thuyền"],
+   ["20:00","Spectra · nhạc nước","Event Plaza trước MBS, miễn phí","walk",0,0,0.2,"Ngồi bậc thềm xem.",false,"15 phút","Quay video màn nước và laser"],
+   ["20:30","Xe 13 chỗ đưa về khách sạn","Đón ở sảnh MBS, khoảng 15 phút","van",0,0,0,"",false,"",""]
+  ]},
+ {n:"Ngày 2", d:"Chủ Nhật 22/11", date:"2026-11-22", area:"Kampong Glam và Gardens by the Bay", snack:840000,
+  rhythm:[[7.6,12.5,"out"],[12.5,15.9,"rest"],[15.9,20.4,"out"]],
+  stops:[
+   ["07:45","Ăn sáng quán ăn 290 Jalan Besar","Mở từ 7:00, cách khách sạn khoảng 250 m","walk",0,861000,0.3,"",false,"45 phút",""],
+   ["09:00","Thánh đường Sultan","Taxi 5 phút, thả đầu phố Bussorah, chụp bên ngoài","taxi",420000,0,0.1,"Vào bên trong cần che vai và đầu gối.",false,"20 phút","Mái vòm vàng nhìn thẳng từ phố Bussorah, hai hàng cọ hai bên"],
+   ["09:20","Haji Lane · Arab Street","Phố bích họa và tiệm đèn, miễn phí","walk",0,0,0.4,"Đi chậm, nhiều quán cà phê để ông bà ngồi nghỉ giữa chừng.",false,"50 phút","Tường vẽ màu ở hai đầu Haji Lane; tiệm đèn khảm Thổ Nhĩ Kỳ ở Arab Street"],
+   ["11:15","Ăn trưa Bak Kut Teh Ng Ah Sio","208 Rangoon Road, gần khách sạn, mở 9:00–21:00","taxi",504000,2310000,0.1,"Quán dùng quạt, không có máy lạnh. Muốn máy lạnh thì đổi sang Song Fa ở Clarke Quay, xa hơn khoảng 15 phút.",false,"1 tiếng",""],
+   ["12:30","Nghỉ trưa, bơi ở khách sạn","Hồ bơi trên sân thượng, đến 15:45","taxi",336000,0,0,"",true,"3 tiếng",""],
+   ["16:00","Gardens by the Bay","Taxi khoảng 15 phút, thả ở cổng Flower Dome","taxi",756000,0,0.1,"",false,"",""],
+   ["16:15","Cloud Forest · Jurassic World","Thác trong nhà 35 m, khủng long chuyển động","walk",0,6846000,0.7,"Đi thang máy lên đỉnh rồi đi dốc xuống. Tiếng gầm lớn và đèn nháy ở khu khủng long, bố mẹ đi sát bé 3 tuổi.",false,"1g15","Thác 35 m ngay cửa vào; con khủng long cổ dài; lối đi trên không Cloud Walk"],
+   ["17:35","Flower Dome","Nhà kính hoa lớn nhất thế giới","walk",0,0,0.4,"Bằng phẳng, mát, nhiều ghế.",false,"45 phút","Khu hoa trưng bày giữa nhà kính; cây bao báp"],
+   ["18:25","Xe đưa đón trong vườn → Supertree","Từ Flower Dome sang khu siêu cây","bus",0,0,0,"Xe chở được xe lăn. Nếu thu phí nhỏ thì trả tại chỗ.",false,"",""],
+   ["18:30","Ăn tối Supertree Food Hall","Kiểu hawker, ngay dưới siêu cây","walk",0,2520000,0.1,"",false,"1 tiếng",""],
+   ["19:45","Garden Rhapsody","Show đèn siêu cây, miễn phí","walk",0,0,0.1,"Ngồi ghế đá hoặc bãi cỏ ngay cạnh.",false,"15 phút","Siêu cây chụp từ dưới gốc lên; video khi đèn đổi màu"],
+   ["20:15","Về khách sạn","Taxi ở bãi đón Bayfront, khoảng 15 phút","taxi",756000,0,0,"",false,"",""]
+  ]},
+ {n:"Ngày 3", d:"Thứ Hai 23/11", date:"2026-11-23", area:"Mount Faber và Sentosa", snack:840000,
+  rhythm:[[7.9,14.4,"out"],[14.4,16.8,"rest"],[16.8,20.6,"out"]],
+  stops:[
+   ["08:00","Ăn sáng quán ăn gần khách sạn","290 Jalan Besar hoặc cà phê Chye Seng Huat Hardware ngay phố Tyrwhitt","walk",0,861000,0.2,"",false,"45 phút",""],
+   ["08:45","Taxi ra HarbourFront Tower 2","Khoảng 25 phút","taxi",924000,0,0.1,"",false,"",""],
+   ["09:15","Cáp treo HarbourFront → Mount Faber","Thang máy lên tầng 15 là ga cáp treo","cable",0,5250000,0,"Vé Sky Pass đi được cả chiều lên Mount Faber rồi sang Sentosa.",false,"10 phút",""],
+   ["09:25","Faber Peak · ngắm toàn cảnh","Đài ngắm ngay cạnh ga cáp treo","walk",0,0,0.1,"",false,"25 phút","Nhìn xuống cảng và đảo Sentosa, cabin cáp treo bay ngang phía sau"],
+   ["09:50","Cáp treo Mount Faber → Sentosa","Bay ngang cảng biển","cable",0,0,0,"",false,"15 phút","Chụp qua kính cabin khi qua cảng"],
+   ["10:10","Sensoryscape","Khu vườn ngay ga cáp treo Sentosa, miễn phí","walk",0,0,0.2,"Có thang máy, lối đi bằng phẳng.",false,"20 phút","Cầu vườn nhìn xuống bãi biển"],
+   ["10:40","Singapore Oceanarium","Xe buýt nội đảo sang Resorts World","bus",0,6006000,0.9,"Trong nhà, ghế ngồi khắp nơi. Mẹ ngồi xe lăn thoải mái.",false,"2 tiếng","Bể kính lớn nhất, cả nhà ngồi thành hàng trước kính"],
+   ["12:45","Ăn trưa Malaysian Food Street","Resorts World, máy lạnh","walk",0,1680000,0.2,"",false,"45 phút",""],
+   ["13:30","Quả cầu Universal","Ngay cổng Universal Studios, miễn phí","walk",0,0,0.1,"Không vào bên trong công viên.",false,"15 phút","Quả cầu xoay có chữ Universal"],
+   ["14:00","Về khách sạn nghỉ, bơi","Taxi khoảng 25 phút, nghỉ đến 16:45","taxi",1176000,0,0,"",true,"2g15",""],
+   ["17:00","Ăn tối lẩu Hi Hot Pot","City Square Mall, cách khách sạn khoảng 500 m. Cùng hệ thống với Haidilao, giá mềm hơn","taxi",336000,7140000,0.1,"Đặt bàn trước. Gọi nồi đôi, một bên không cay cho các bé.",false,"1g15",""],
+   ["18:30","Beach Station · ngắm hoàng hôn","Taxi khoảng 25 phút, ngồi ghế chờ show","taxi",1260000,0,0.1,"",false,"40 phút","Hoàng hôn và hàng dừa bãi Siloso"],
+   ["19:40","Wings of Time","Ghế Premium, bé 3 tuổi miễn phí","walk",0,3969000,0.1,"Suất 19:40, không chọn 20:40.",false,"25 phút","Video đoạn pháo hoa cuối show"],
+   ["20:15","Về khách sạn","Đón tại Beach Station, khoảng 25 phút","taxi",1344000,0,0,"",false,"",""]
+  ]},
+ {n:"Ngày 4", d:"Thứ Ba 24/11", date:"2026-11-24", area:"Chinatown và về nước", snack:840000,
+  rhythm:[[8.5,13.5,"out"],[13.5,17.5,"move"],[17.5,18.67,"fly"]],
+  stops:[
+   ["08:30","Trả phòng, gửi hành lý","Trả phòng trước 12:00, lễ tân giữ đồ","rest",0,0,0,"Trả lại xe lăn thuê cho lễ tân nếu đã hẹn nhà cho thuê đến lấy.",true,"15 phút",""],
+   ["08:45","Ăn sáng Chinatown Complex Food Centre","Taxi khoảng 15 phút, chợ ẩm thực lớn nhất Chinatown","taxi",630000,861000,0.2,"",false,"50 phút",""],
+   ["09:45","Phật Nha Tự","Cách chợ khoảng 300 m, thang máy lên 4 tầng, miễn phí","walk",0,0,0.3,"Mặc quần áo kín vai và đầu gối. Trong chính điện không chụp ảnh.",false,"45 phút","Mặt tiền đỏ kiểu Đường; vườn lan trên sân thượng"],
+   ["10:30","Chinatown · phố Pagoda","Mua khô bò Bee Cheng Hiang, bánh dứa","walk",0,0,0.3,"",false,"45 phút","Đèn lồng đỏ giăng phố Pagoda; đền Sri Mariamman đầu phố"],
+   ["11:30","Ăn trưa Maxwell Food Centre","Cơm gà Tian Tian","walk",0,1428000,0.2,"",false,"1 tiếng",""],
+   ["12:40","Về khách sạn lấy hành lý","Taxi khoảng 15 phút","taxi",630000,0,0,"",false,"",""],
+   ["13:30","Xe 13 chỗ ra Changi T2","Khoảng 20 phút, tài xế đón ở sảnh","van",1365000,0,0.3,"Hỗ trợ xe lăn của Singapore Airlines chờ ở quầy làm thủ tục.",false,"",""],
+   ["17:30","Bay SQ186 về TP.HCM","Hạ cánh 18:40","fly",0,0,0,"",false,"",""],
+   ["18:40","Từ Tân Sơn Nhất về nhà","","car",600000,0,0,"",false,"",""]
+  ]}
+];
+// Dự toán gốc cho bảng chi phí (dùng lần đầu mở app và khi đặt lại)
+const SEED = [
+ ["c01","Cố định","Vé máy bay SQ187/SQ186 + bảo hiểm",42995000,42995000,"tra","Trip.com · 5 NL + 3 TE"],
+ ["c02","Cố định","Khách sạn Mercure Singapore Tyrwhitt, 3 phòng × 3 đêm",27490532,27490532,"tra","Trip.com · 1 phòng ban công + 2 phòng Classic · không hoàn tiền"],
+ ["c03","Cố định","eSIM 4 ngày × 5",600000,0,"chua",""],
+ ["c04","Cố định","Xe đưa đón Tân Sơn Nhất 2 chiều",1200000,0,"chua","Xe 16 chỗ"],
+ ["c10","Vé tham quan","Du thuyền sông Singapore",4074000,0,"chua","Ngày 1 · 18:30"],
+ ["c11","Vé tham quan","Cloud Forest + Flower Dome",6846000,0,"chua","Ngày 2 · 16:30 · đã gồm Jurassic World"],
+ ["c12","Vé tham quan","Cáp treo Mount Faber",5250000,0,"chua","Ngày 3"],
+ ["c13","Vé tham quan","Singapore Oceanarium",6006000,0,"chua","Ngày 3 · bé 3 tuổi miễn phí"],
+ ["c14","Vé tham quan","Wings of Time ghế Premium",3969000,0,"chua","Ngày 3 · suất 19:40"],
+ ["c20","Ăn uống","N1 sáng · Jewel Changi",1260000,0,"chua",""],
+ ["c21","Ăn uống","N1 trưa · quán ăn 290 Jalan Besar",1428000,0,"chua",""],
+ ["c22","Ăn uống","N1 tối · Rasapura Masters",2310000,0,"chua",""],
+ ["c23","Ăn uống","N2 sáng · quán ăn 290 Jalan Besar",861000,0,"chua",""],
+ ["c24","Ăn uống","N2 trưa · Bak Kut Teh Ng Ah Sio",2310000,0,"chua","208 Rangoon Road"],
+ ["c25","Ăn uống","N2 tối · Supertree Food Hall",2520000,0,"chua",""],
+ ["c26","Ăn uống","N3 sáng · quán gần khách sạn",861000,0,"chua",""],
+ ["c27","Ăn uống","N3 trưa · Malaysian Food Street",1680000,0,"chua",""],
+ ["c28","Ăn uống","N3 tối · lẩu Hi Hot Pot",7140000,0,"chua","City Square Mall · đặt bàn 17:00"],
+ ["c29","Ăn uống","N4 sáng · Chinatown Complex Food Centre",861000,0,"chua",""],
+ ["c30","Ăn uống","N4 trưa · Maxwell, cơm gà Tian Tian",1428000,0,"chua",""],
+ ["c31","Ăn uống","Nước, cà phê, ăn vặt · 4 ngày",3360000,0,"chua","840.000 đ mỗi ngày"],
+ ["c40","Đi lại","Xe 13 chỗ đón và tiễn sân bay",2940000,0,"chua","S$75 đón · S$65 tiễn"],
+ ["c41","Đi lại","Xe 13 chỗ chiều ngày 1, 5 giờ",6300000,0,"chua","S$60/giờ, chờ sẵn 16:00–20:45"],
+ ["c42","Đi lại","Taxi ngày 2",2772000,0,"chua","5 chặng"],
+ ["c46","Đi lại","Thuê xe lăn gấp gọn cả chuyến",945000,0,"chua","S$15 thuê + S$30 giao nhận · cọc S$100 hoàn lại"],
+ ["c43","Đi lại","Taxi ngày 3",5040000,0,"chua","5 chặng, khách sạn xa Sentosa"],
+ ["c44","Đi lại","Taxi ngày 4",1260000,0,"chua","Chinatown 2 chiều"],
+ ["c45","Đi lại","Dự phòng đi lại",1260000,0,"chua","Mưa, đổi lịch"]
+].map(([id,cat,label,planned,actual,status,note],i)=>({id,cat,label,planned,actual,status,note,order:i}));
+
+const CK_CATS = ["Giấy tờ","Thuốc & y tế","Hành lý & vali","Quần áo","Vật dụng khác"];
+const CHECKLIST = [
+ ["k01","Giấy tờ","Hộ chiếu bản gốc — còn hạn từ 6 tháng trở lên","Cả 8 người, kiểm tra ngay từ bây giờ"],
+ ["k02","Giấy tờ","Giấy khai sinh bản gốc của 3 bé","Phòng khi hải quan hỏi quan hệ cha mẹ – con"],
+ ["k03","Giấy tờ","Giấy đăng ký kết hôn của bố mẹ",""],
+ ["k04","Giấy tờ","Giấy ủy quyền cho trẻ xuất cảnh (nếu cần)","Chỉ cần khi bé không đi cùng đủ cả cha lẫn mẹ"],
+ ["k05","Giấy tờ","Vé máy bay điện tử","Lưu trong điện thoại + in thêm 1 bản giấy"],
+ ["k06","Giấy tờ","Xác nhận đặt phòng khách sạn",""],
+ ["k07","Giấy tờ","Bảo hiểm du lịch","Lưu sẵn số hotline claim"],
+ ["k08","Giấy tờ","SG Arrival Card đã khai online","Khai trước tối đa 3 ngày"],
+ ["k09","Giấy tờ","Thẻ visa/mastercard quốc tế","Báo ngân hàng biết đi nước ngoài"],
+ ["k10","Giấy tờ","Ảnh thẻ dự phòng","Phòng cần làm giấy tờ khẩn tại Singapore"],
+ ["k11","Thuốc & y tế","Hạ sốt, giảm đau (người lớn + trẻ em)",""],
+ ["k12","Thuốc & y tế","Thuốc đau bụng, tiêu chảy, Oresol",""],
+ ["k13","Thuốc & y tế","Thuốc chống say tàu xe",""],
+ ["k14","Thuốc & y tế","Thuốc dị ứng",""],
+ ["k15","Thuốc & y tế","Thuốc/miếng dán đau xương khớp cho mẹ","Kèm đơn thuốc nếu là thuốc kê đơn"],
+ ["k16","Thuốc & y tế","Thuốc cảm, ho",""],
+ ["k17","Thuốc & y tế","Băng gạc, cồn sát trùng vết thương",""],
+ ["k18","Thuốc & y tế","Kem/xịt chống muỗi",""],
+ ["k19","Thuốc & y tế","Kem chống nắng",""],
+ ["k20","Thuốc & y tế","Thuốc riêng của ông bà","Huyết áp, tim mạch... mang dư 2-3 ngày"],
+ ["k21","Thuốc & y tế","Khẩu trang, nước rửa tay khô",""],
+ ["k22","Hành lý & vali","Chia đồ vào 3 vali theo phòng","Lỡ thất lạc 1 vali thì mỗi phòng vẫn còn đồ"],
+ ["k23","Hành lý & vali","Balo/túi xách tay đựng giấy tờ + thuốc cần dùng ngay",""],
+ ["k24","Hành lý & vali","Dán thẻ tên + số điện thoại lên vali",""],
+ ["k25","Hành lý & vali","Chụp ảnh vali trước khi ký gửi",""],
+ ["k26","Quần áo","Quần áo mỏng đủ ngày + 1-2 bộ dự phòng",""],
+ ["k27","Quần áo","Áo khoác mỏng/dài tay","Máy lạnh trong nhà khá lạnh"],
+ ["k28","Quần áo","Giày/sandal đi bộ êm chân","Ưu tiên đế êm cho ông bà và mẹ"],
+ ["k29","Quần áo","Áo mưa mỏng hoặc ô gấp gọn",""],
+ ["k30","Quần áo","Đồ bơi","Khách sạn có hồ bơi sân thượng"],
+ ["k31","Quần áo","Đồ lót, tất dự phòng đủ ngày",""],
+ ["k32","Quần áo","Đồ ngủ",""],
+ ["k33","Vật dụng khác","Gối cổ chữ U","Cho chặng bay và xe đường dài"],
+ ["k34","Vật dụng khác","Khăn ướt, khăn giấy khô",""],
+ ["k35","Vật dụng khác","Bỉm/sữa cho bé 3 tuổi nếu cần",""],
+ ["k36","Vật dụng khác","Đồ chơi/sách cho bé 9, 11 tuổi",""],
+ ["k37","Vật dụng khác","Xác nhận nơi giao nhận xe lăn thuê",""],
+ ["k38","Vật dụng khác","Sạc điện thoại, sạc dự phòng, ổ chuyển đổi ổ cắm","Singapore dùng ổ 3 chân kiểu Anh"],
+ ["k39","Vật dụng khác","Kích hoạt eSIM trước khi bay",""]
+];
+
+const fmt = n => Math.round(n).toLocaleString("vi-VN");
+const tr = n => (n/1e6).toLocaleString("vi-VN",{maximumFractionDigits:1}) + " tr";
+const esc = s => String(s ?? "").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $ = id => document.getElementById(id);
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2200);}
+
+/* storage */
+function load(k,fallback){try{const v=localStorage.getItem(k);return v?JSON.parse(v):fallback;}catch(e){return fallback;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true;}catch(e){toast("Không lưu được trên máy này");return false;}}
+let rows = load(KEY,null); if(!Array.isArray(rows)){rows=JSON.parse(JSON.stringify(SEED)); save(KEY,rows);}
+else { // cập nhật dự toán mới cho các khoản chưa nhập thực chi, thêm khoản mới
+  SEED.forEach(sd=>{const r=rows.find(x=>x.id===sd.id);
+    if(!r) rows.push(JSON.parse(JSON.stringify(sd)));
+    else if(!(r.actual>0)){r.label=sd.label;r.planned=sd.planned;r.note=sd.note;r.cat=sd.cat;if(sd.actual>0){r.actual=sd.actual;r.status=sd.status;}}});
+  save(KEY,rows); }
+let done = load(DONEKEY,{});
+const CKKEY = "sg-trip-checklist-v1";
+let ckState = load(CKKEY,{});
+if(navigator.storage && navigator.storage.persist){navigator.storage.persist().catch(()=>{});}
+
+/* checklist */
+function renderChecklist(){
+  const total = CHECKLIST.length, doneCount = CHECKLIST.filter(c=>ckState[c[0]]).length;
+  $("k-count").textContent = doneCount+"/"+total;
+  $("k-bar").innerHTML = `<span style="width:${total?doneCount/total*100:0}%"></span>`;
+  $("checklist").innerHTML = CK_CATS.map(cat=>{
+    const items = CHECKLIST.filter(c=>c[1]===cat); if(!items.length) return "";
+    const body = items.map(([id,,label,note])=>{
+      const on = !!ckState[id];
+      return `<label class="citem${on?" done":""}"><input type="checkbox" data-id="${id}" ${on?"checked":""}><span class="ctext"><b>${esc(label)}</b>${note?`<p>${esc(note)}</p>`:""}</span></label>`;
+    }).join("");
+    const cDone = items.filter(([id])=>ckState[id]).length;
+    return `<div class="cat"><div class="cathead"><h3>${cat}</h3><span class="num">${cDone}/${items.length}</span></div><div class="clist">${body}</div></div>`;
+  }).join("");
+}
+$("checklist").addEventListener("change", e=>{
+  const cb = e.target.closest('input[type="checkbox"]'); if(!cb) return;
+  ckState[cb.dataset.id] = cb.checked; save(CKKEY,ckState); renderChecklist();
+});
+
+/* itinerary */
+let dayFilter = "all";
+function renderDayNav(){
+  const btns=[["all","Cả chuyến"],...DAYS.map((d,i)=>[String(i),d.n])];
+  $("daynav").innerHTML=btns.map(([k,l])=>`<button class="dbtn" data-k="${k}" aria-pressed="${k===dayFilter}">${l}</button>`).join("");
+}
+$("daynav").addEventListener("click",e=>{const b=e.target.closest(".dbtn");if(!b)return;dayFilter=b.dataset.k;renderDayNav();renderDays();});
+function renderLegend(){$("legend").innerHTML=Object.values(MODES).map(([l,c])=>`<span class="chip ${c}">${l}</span>`).join("");}
+function rhythmHTML(r,first){
+  const lo=2,hi=22,pct=h=>((h-lo)/(hi-lo)*100);
+  const col={out:"var(--b-out)",rest:"var(--b-rest)",fly:"var(--b-fly)",move:"var(--b-move)"};
+  return `<div aria-hidden="true"><div class="rbar">${r.map(([a,b,k])=>`<span style="left:${pct(a)}%;width:${pct(b)-pct(a)}%;background:${col[k]}"></span>`).join("")}</div>
+  <div class="rticks">${[3,6,9,12,15,18,21].map(h=>`<span style="left:${pct(h)}%">${h}h</span>`).join("")}</div>
+  ${first?`<div class="rkey"><span><i style="background:var(--b-out)"></i>Ra ngoài</span><span><i style="background:var(--b-rest)"></i>Nghỉ ở khách sạn</span><span><i style="background:var(--b-fly)"></i>Bay</span><span><i style="background:var(--b-move)"></i>Sân bay, chờ</span></div>`:""}</div>`;
+}
+function renderDays(){
+  $("days").innerHTML = DAYS.map((day,i)=>{
+    if(dayFilter!=="all" && dayFilter!==String(i)) return "";
+    let move=0,spend=0,walk=0;
+    const list=day.stops.map((s,j)=>{
+      const [t,title,desc,mode,mc,sc,km,tip,isRest,dur,photo]=s; move+=mc; spend+=sc; walk+=km;
+      const key=i+"-"+j, isDone=!!done[key], [ml,mcls]=MODES[mode], total=mc+sc;
+      const cost = total?`<span class="num">${fmt(total)}</span>`:(/miễn phí/i.test(desc)?`<span class="free">Miễn phí</span>`:"");
+      const sub=(mc&&sc)?`<small class="num">xe ${fmt(mc)} · ${fmt(sc)}</small>`:"";
+      return `<div class="stop${isRest?" rest":""}${isDone?" done":""}">
+        <div class="t num">${t}</div>
+        <div class="what"><h3>${esc(title)}</h3>${desc?`<p>${esc(desc)}</p>`:""}
+          <div class="meta"><span class="chip ${mcls}">${ml}</span>${dur?`<span class="stay num">Dừng ${dur}</span>`:""}${km?`<span class="walk num">đi bộ ${km.toLocaleString("vi-VN")} km</span>`:""}
+          <button class="tick" data-key="${key}">${isDone?"✓ Đã xong":"Xong"}</button></div>
+          ${photo?`<p class="photo"><b>Chụp ảnh:</b> ${esc(photo)}</p>`:""}</div>
+        <div class="cost">${cost}${sub}</div>
+        ${tip?`<div class="tip">${esc(tip)}</div>`:""}</div>`;
+    }).join("");
+    return `<article class="day"><div class="dayhead"><h2>${day.n} · ${esc(day.area)}</h2><span class="d">${day.d}</span></div>
+      <div class="daystats"><span>Đi bộ <b class="num">${walk.toLocaleString("vi-VN",{maximumFractionDigits:1})} km</b></span><span>Đi lại <b class="num">${fmt(move)}</b></span><span>Vé và ăn <b class="num">${fmt(spend)}</b></span><span>Nước, ăn vặt <b class="num">${fmt(day.snack)}</b></span></div>
+      ${rhythmHTML(day.rhythm,i===0||dayFilter!=="all")}
+      <div class="stops">${list}<div class="daytotal"><span>Cộng ${day.n.toLowerCase()}</span><span class="num">${fmt(move+spend+day.snack)} đ</span></div></div></article>`;
+  }).join("");
+}
+$("days").addEventListener("click",e=>{const b=e.target.closest(".tick");if(!b)return;const k=b.dataset.key;done[k]=!done[k];if(!done[k])delete done[k];save(DONEKEY,done);renderDays();});
+
+/* tabs */
+function showTab(id){["tab-plan","tab-cost","tab-checklist"].forEach(t=>$(t).setAttribute("aria-selected",t===id));$("panel-plan").hidden=id!=="tab-plan";$("panel-cost").hidden=id!=="tab-cost";$("panel-checklist").hidden=id!=="tab-checklist";try{localStorage.setItem("sg-tab",id);}catch(e){}}
+$("tab-plan").addEventListener("click",()=>showTab("tab-plan"));$("tab-cost").addEventListener("click",()=>showTab("tab-cost"));$("tab-checklist").addEventListener("click",()=>showTab("tab-checklist"));
+try{const s=localStorage.getItem("sg-tab");if(s)showTab(s);}catch(e){}
+// Tự nhảy tới đúng ngày khi đang đi
+(function(){const today=new Date().toISOString().slice(0,10);const i=DAYS.findIndex(d=>d.date===today);if(i>=0)dayFilter=String(i);})();
+
+/* tracker */
+const CATS=["Cố định","Vé tham quan","Ăn uống","Đi lại","Phát sinh"], ST={chua:"Chưa chi",dat:"Đã đặt",tra:"Đã trả"};
+let filter="all", editing=null;
+$("f-cat").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+const hasActual=r=>typeof r.actual==="number"&&r.actual>0;
+function renderTracker(){
+  const plan=rows.reduce((a,r)=>a+(r.planned||0),0), spent=rows.reduce((a,r)=>a+(hasActual(r)?r.actual:0),0);
+  const committed=rows.reduce((a,r)=>a+(hasActual(r)?r.actual:(r.planned||0)),0), left=BUDGET-committed, toPay=committed-spent;
+  $("s-budget").textContent=tr(BUDGET);$("s-plan").textContent=tr(plan);$("s-spent").textContent=tr(spent);
+  $("s-left").textContent=(left<0?"−":"")+tr(Math.abs(left));$("s-leftbox").className="sum "+(left<0?"neg":"hl");
+  const base=Math.max(BUDGET,committed)||1;
+  $("mbar").innerHTML=`<span style="width:${spent/base*100}%;background:var(--good)"></span><span style="width:${Math.max(toPay,0)/base*100}%;background:var(--b-out)"></span>`;
+  const vis=rows.filter(r=>filter==="all"||(r.status||"chua")===filter);
+  const html=CATS.map(cat=>{
+    const all=rows.filter(r=>r.cat===cat); const list=vis.filter(r=>r.cat===cat).sort((a,b)=>(a.order??999)-(b.order??999));
+    if(!list.length) return "";
+    const cp=all.reduce((a,r)=>a+(r.planned||0),0), ca=all.reduce((a,r)=>a+(hasActual(r)?r.actual:0),0);
+    return `<div class="cat"><div class="cathead"><h3>${cat}</h3><span class="num">Dự toán ${fmt(cp)} · Đã chi ${fmt(ca)}</span></div>
+      <div class="tbl"><table><thead><tr><th>Khoản</th><th class="r">Dự toán</th><th class="r">Thực chi</th><th class="r">Chênh</th><th>Trạng thái</th></tr></thead><tbody>${
+      list.map(r=>{const diff=hasActual(r)?r.actual-(r.planned||0):null;
+        const d=diff===null?"":`<span class="${diff>0?"over":"under"} num">${diff>0?"+":diff<0?"−":""}${fmt(Math.abs(diff))}</span>`;
+        return `<tr data-id="${esc(r.id)}"><td>${esc(r.label)}${r.note?`<span class="note">${esc(r.note)}</span>`:""}</td><td class="r num">${r.planned?fmt(r.planned):"—"}</td><td class="r num">${hasActual(r)?fmt(r.actual):"—"}</td><td class="r">${d}</td><td><span class="pill s-${r.status||"chua"}">${ST[r.status||"chua"]}</span></td></tr>`;}).join("")
+      }</tbody></table></div></div>`;
+  }).join("");
+  $("tracker").innerHTML=html||`<p class="foot">Không có khoản nào ở trạng thái này.</p>`;
+}
+document.querySelectorAll(".fbtn").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.f;document.querySelectorAll(".fbtn").forEach(x=>x.setAttribute("aria-pressed",x===b));renderTracker();}));
+$("tracker").addEventListener("click",e=>{const r=e.target.closest("tr[data-id]");if(r)openEdit(r.dataset.id);});
+
+const dlg=$("dlg");
+const toNum=s=>{const v=(s||"").trim();if(!v)return null;return parseFloat(v.replace(/\./g,"").replace(/,/g,".").replace(/[^\d.]/g,""))||0;};
+function updateConv(){const v=toNum($("f-actual").value);$("f-conv").textContent=($("f-unit").value==="sgd"&&v>0)?`≈ ${fmt(v*RATE)} đ`:"";}
+$("f-actual").addEventListener("input",updateConv);$("f-unit").addEventListener("change",updateConv);
+function openEdit(id){
+  const r=id?rows.find(x=>x.id===id):null; editing=r?r.id:null;
+  $("f-title").textContent=r?"Sửa khoản chi":"Thêm khoản phát sinh";
+  $("f-label").value=r?.label||"";$("f-cat").value=r?.cat||"Phát sinh";$("f-status").value=r?.status||"chua";
+  $("f-planned").value=r?.planned?fmt(r.planned):"";
+  if(r&&hasActual(r)){$("f-actual").value=fmt(r.actual);$("f-unit").value="vnd";}else{$("f-actual").value="";$("f-unit").value="sgd";}
+  $("f-note").value=r?.note||"";$("f-del").hidden=!r;updateConv();dlg.showModal();
+}
+$("add").addEventListener("click",()=>openEdit(null));
+$("f-cancel").addEventListener("click",()=>dlg.close());
+$("form").addEventListener("submit",e=>{
+  e.preventDefault();
+  let actual=toNum($("f-actual").value); if(actual!==null&&$("f-unit").value==="sgd") actual=Math.round(actual*RATE);
+  const body={label:$("f-label").value.trim()||"Khoản chi",cat:$("f-cat").value,status:$("f-status").value,planned:toNum($("f-planned").value)||0,actual:actual||0,note:$("f-note").value.trim()};
+  if(body.actual&&body.status==="chua") body.status="tra";
+  if(editing){const i=rows.findIndex(x=>x.id===editing);rows[i]={...rows[i],...body};}
+  else rows.push({id:"p"+Date.now(),order:900+rows.length,...body});
+  if(save(KEY,rows)){dlg.close();renderTracker();toast("Đã lưu");}
+});
+$("f-del").addEventListener("click",()=>{const r=rows.find(x=>x.id===editing);if(!r||!confirm(`Xóa “${r.label}”?`))return;rows=rows.filter(x=>x.id!==editing);save(KEY,rows);dlg.close();renderTracker();});
+
+/* backup */
+async function shareFile(name,text,type){
+  const file=new File([text],name,{type});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:name});return;}catch(e){if(e.name==="AbortError")return;}}
+  const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=name;document.body.appendChild(a);a.click();a.remove();
+}
+const stamp=()=>new Date().toISOString().slice(0,16).replace(/[-:T]/g,"");
+$("b-export").addEventListener("click",()=>shareFile(`singapore-chiphi-${stamp()}.json`,JSON.stringify({v:1,rows,done},null,1),"application/json"));
+$("b-csv").addEventListener("click",()=>{
+  const q=s=>`"${String(s??"").replace(/"/g,'""')}"`;
+  const lines=[["Nhóm","Khoản","Dự toán","Thực chi","Trạng thái","Ghi chú"].map(q).join(",")].concat(rows.map(r=>[r.cat,r.label,r.planned||0,r.actual||0,ST[r.status||"chua"],r.note].map(q).join(",")));
+  shareFile(`singapore-chiphi-${stamp()}.csv`,"﻿"+lines.join("\n"),"text/csv");
+});
+$("b-import").addEventListener("click",()=>$("f-import").click());
+$("f-import").addEventListener("change",async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{const data=JSON.parse(await f.text());if(!Array.isArray(data.rows))throw 0;
+    if(!confirm(`Khôi phục ${data.rows.length} khoản từ bản sao lưu? Dữ liệu hiện tại sẽ bị thay thế.`))return;
+    rows=data.rows;done=data.done||{};save(KEY,rows);save(DONEKEY,done);renderTracker();renderDays();toast("Đã khôi phục");
+  }catch(err){alert("Tệp này không phải bản sao lưu của ứng dụng. Chọn tệp .json đã tạo từ nút “Sao lưu”.");}
+  e.target.value="";
+});
+$("b-reset").addEventListener("click",()=>{if(!confirm("Xóa mọi số thực chi đã nhập và trở về dự toán gốc?"))return;rows=JSON.parse(JSON.stringify(SEED));save(KEY,rows);renderTracker();toast("Đã đặt lại");});
+
+/* online state + offline cache */
+function net(){$("netstate").textContent=navigator.onLine?"":"Đang offline · dữ liệu vẫn lưu trên máy";}
+addEventListener("online",net);addEventListener("offline",net);net();
+if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}
+
+renderDayNav();renderLegend();renderDays();renderTracker();renderChecklist();
+</script>
+</body>
+</html>
