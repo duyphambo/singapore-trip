@@ -190,7 +190,7 @@ dialog::backdrop{background:rgba(10,15,12,.45)}
         <h1>Singapore, cả nhà 8 người</h1>
       </div>
     </div>
-    <p class="who">5 người lớn, hai bé 9 và 11 tuổi, bé 3 tuổi. Mỗi ngày đi bộ khoảng 2 km, có xe lăn gấp gọn theo cả chuyến. Chiều ngày 1 thuê xe 13 chỗ chờ sẵn; các chặng khác gọi <b>taxi</b>, không gọi Grab xe thường.</p>
+    <p class="who">5 người lớn, hai bé 9 và 11 tuổi, bé 3 tuổi. Mỗi ngày đi bộ khoảng 2 km, có xe lăn gấp gọn theo cả chuyến. Chiều ngày 1 thuê xe 13 chỗ đưa qua các điểm tham quan và MBS ăn tối, sau đó taxi về khách sạn; các chặng khác gọi <b>taxi</b>, không gọi Grab xe thường.</p>
     <div class="flights">
       <div class="flight"><div class="code">SGN</div><div class="mid"><b>SQ187 · 05:55</b>2g10p · 737 MAX 8</div><div class="code">SIN</div>
         <div class="foot">Đến 09:05 · Ghế 55A–57C · Có mặt Tân Sơn Nhất T2 lúc 03:15</div></div>
@@ -327,23 +327,23 @@ const MODES = {
 };
 const DAYS = [
  {n:"Ngày 1", d:"Thứ Bảy 21/11", date:"2026-11-21", area:"Jewel và khu trung tâm Marina Bay", snack:840000,
-  rhythm:[[2.5,5.92,"move"],[5.92,9.08,"fly"],[9.08,13,"out"],[13,16,"rest"],[16,20.75,"out"]],
+  rhythm:[[2.5,5.92,"move"],[5.92,9.08,"fly"],[9.08,12,"out"],[12,16,"rest"],[16,20.75,"out"]],
   stops:[
    ["02:30","Rời nhà ra Tân Sơn Nhất","Xe 16 chỗ cho 8 người và vali","car",600000,0,0,"Cho bé ngủ tiếp trên xe.",false,"",""],
    ["05:55","Bay SQ187","Hạ cánh Changi 09:05","fly",0,0,0,"",false,"",""],
    ["09:05","Nhập cảnh, lấy hành lý","Changi T3","walk",0,0,0.3,"Đã báo Singapore Airlines hỗ trợ xe lăn miễn phí: nhân viên đẩy mẹ từ cửa máy bay qua nhập cảnh.",false,"40 phút",""],
-   ["09:45","Jewel Changi · Rain Vortex","Ăn sáng ở khu ẩm thực tầng B2","walk",0,1260000,0.3,"Đi thang máy giữa các tầng, nhiều ghế ngồi quanh thác.",false,"1g15","Thác Rain Vortex nhìn từ tầng 1; cả nhà trước thác"],
-   ["11:15","Xe 13 chỗ về Mercure Tyrwhitt","Khoảng 20 phút, tài xế đón ở sảnh đến","van",1575000,0,0,"Nhận phòng chính thức từ 15:00. Email khách sạn xin nhận sớm; nếu chưa có phòng thì gửi đồ, ăn trưa rồi ngồi nghỉ ở sảnh hoặc hồ bơi sân thượng.",false,"",""],
-   ["12:15","Ăn trưa quán ăn 290 Jalan Besar","Cách khách sạn khoảng 250 m: mì bò Hwa Heng, cơm, mì","walk",0,1428000,0.3,"",false,"45 phút",""],
-   ["13:00","Ngủ trưa ở khách sạn","Đến 16:00","rest",0,0,0,"Cả nhà dậy từ 2 giờ sáng. Đừng cắt khoảng này.",true,"3 tiếng",""],
-   ["16:00","Xe 13 chỗ chờ sẵn cả buổi","Đón ở sảnh khách sạn, chở qua từng điểm đến 20:45","van",6300000,0,0,"Xe lăn gấp gọn để trong cốp, ai mệt thì ngồi.",false,"",""],
-   ["16:15","Tòa Nhà Quốc Hội cũ · Nhà hát Victoria","Xe thả ở Empress Place, miễn phí","van",0,0,0.2,"",false,"15 phút","Mặt tiền trắng Nhà hát Victoria và tháp đồng hồ; tượng Raffles bên bờ sông"],
-   ["16:35","Công viên Merlion","Xe thả ở One Fullerton, đi khoảng 150 m tới tượng","van",0,0,0.2,"Lối từ One Fullerton bằng phẳng, không phải xuống bậc bờ sông.",false,"30 phút","Tượng Merlion phun nước với Marina Bay Sands phía sau; kiểu chụp “hứng nước”"],
+   ["09:45","Jewel Changi · Rain Vortex","Ăn sáng nhanh gọn ở khu ẩm thực tầng B2","walk",0,1260000,0.3,"Rút ngắn còn 1 tiếng (trước là 1g15) để cả nhà có thêm giờ ngủ trưa — dậy từ 2 giờ sáng nên ưu tiên nghỉ hơn là nán lại đây.",false,"1 tiếng","Thác Rain Vortex nhìn từ tầng 1; cả nhà trước thác"],
+   ["10:45","Xe 13 chỗ về Mercure Tyrwhitt","Khoảng 20 phút, tài xế đón ở sảnh đến","van",1575000,0,0,"Nhận phòng chính thức từ 15:00. Email khách sạn xin nhận sớm; nếu chưa có phòng thì gửi đồ, ăn trưa rồi ngồi nghỉ ở sảnh hoặc hồ bơi sân thượng.",false,"",""],
+   ["11:05","Ăn trưa quán ăn 290 Jalan Besar","Cách khách sạn khoảng 250 m: mì bò Hwa Heng, cơm, mì","walk",0,1428000,0.3,"",false,"45 phút",""],
+   ["12:00","Ngủ trưa ở khách sạn","Đến 16:00","rest",0,0,0,"Cả nhà dậy từ 2 giờ sáng nên đổi thành 4 tiếng nghỉ (trước là 3 tiếng), lấy giờ từ việc rút ngắn Jewel Changi. Đừng cắt khoảng này.",true,"4 tiếng",""],
+   ["16:00","Xe 13 chỗ đưa qua các điểm","Đón ở sảnh khách sạn, chở qua từng điểm, thả tại MBS ăn tối lúc 17:40 rồi xe về","van",3780000,0,0,"Xe lăn gấp gọn để trong cốp, ai mệt thì ngồi. Thuê 3 tiếng (16:00–19:00) thay vì chờ cả buổi, đủ đưa qua Parliament, Merlion, Esplanade rồi thả ở MBS.",false,"",""],
+   ["16:15","Tòa Nhà Quốc Hội cũ · Nhà hát Victoria","Xe thả ở Empress Place, miễn phí","van",0,0,0.2,"Điểm này có thể bỏ qua nếu cả nhà còn mệt — ngồi trên xe ngắm qua kính lúc xe chạy ngang, đi thẳng tới Merlion cũng được.",false,"15 phút","Mặt tiền trắng Nhà hát Victoria và tháp đồng hồ; tượng Raffles bên bờ sông"],
+   ["16:35","Công viên Merlion","Xe thả ở One Fullerton, đi khoảng 150 m tới tượng","van",0,0,0.2,"Lối từ One Fullerton bằng phẳng, không phải xuống bậc bờ sông. 16:35 vẫn còn nắng chiều rõ — mặt trời lặn ở Singapore khoảng 18:50, nên vẫn chụp hình sáng đẹp bình thường.",false,"30 phút","Tượng Merlion phun nước với Marina Bay Sands phía sau; kiểu chụp “hứng nước”"],
    ["17:10","Nhà hát Esplanade","Xe chở sang, thả trước nhà hát","van",0,0,0.2,"",false,"20 phút","Mái “trái sầu riêng”; bậc Outdoor Theatre nhìn sang Marina Bay Sands"],
    ["17:40","Marina Bay Sands · ăn tối Rasapura Masters","Xe thả ở sảnh B1 The Shoppes","van",0,2310000,0.2,"Có ghế cao cho bé, không cần đặt bàn.",false,"1 tiếng",""],
    ["18:45","Du thuyền sông Singapore","Bến ngay trước MBS, 40 phút","boat",0,4074000,0.1,"",false,"40 phút","Merlion và Clarke Quay lúc lên đèn, chụp từ đuôi thuyền"],
    ["20:00","Spectra · nhạc nước","Event Plaza trước MBS, miễn phí","walk",0,0,0.2,"Ngồi bậc thềm xem.",false,"15 phút","Quay video màn nước và laser"],
-   ["20:30","Xe 13 chỗ đưa về khách sạn","Đón ở sảnh MBS, khoảng 15 phút","van",0,0,0,"",false,"",""]
+   ["20:15","Taxi về khách sạn","Gọi taxi ngay sau khi xem Spectra xong, khoảng 20 phút","taxi",756000,0,0,"Khu MBS đi bộ ngắn giữa nhà hàng, bến du thuyền và chỗ xem Spectra nên không cần giữ xe 13 chỗ chờ cả buổi.",false,"20 phút",""]
   ]},
  {n:"Ngày 2", d:"Chủ Nhật 22/11", date:"2026-11-22", area:"Kampong Glam và Gardens by the Bay", snack:840000,
   rhythm:[[7.6,12.5,"out"],[12.5,15.9,"rest"],[15.9,20.4,"out"]],
@@ -417,7 +417,8 @@ const SEED = [
  ["c30","Ăn uống","N4 trưa · Maxwell, cơm gà Tian Tian",1428000,0,"chua",""],
  ["c31","Ăn uống","Nước, cà phê, ăn vặt · 4 ngày",3360000,0,"chua","840.000 đ mỗi ngày"],
  ["c40","Đi lại","Xe 13 chỗ đón và tiễn sân bay",2940000,0,"chua","S$75 đón · S$65 tiễn"],
- ["c41","Đi lại","Xe 13 chỗ chiều ngày 1, 5 giờ",6300000,0,"chua","S$60/giờ, chờ sẵn 16:00–20:45"],
+ ["c41","Đi lại","Xe 13 chỗ chiều ngày 1, 3 giờ",3780000,0,"chua","S$60/giờ, đón 16:00 · thả tại MBS ~19:00"],
+ ["c47","Đi lại","Taxi từ MBS về khách sạn sau Spectra",756000,0,"chua","2 xe, ~20 phút, gọi ngay sau show"],
  ["c42","Đi lại","Taxi ngày 2",2772000,0,"chua","5 chặng"],
  ["c46","Đi lại","Thuê xe lăn gấp gọn cả chuyến",945000,0,"chua","S$15 thuê + S$30 giao nhận · cọc S$100 hoàn lại"],
  ["c43","Đi lại","Taxi ngày 3",5040000,0,"chua","5 chặng, khách sạn xa Sentosa"],
@@ -569,6 +570,7 @@ const STOP_LINK = {
   "0-0":"c04", "3-8":"c04",
   "0-4":"c40", "3-6":"c40",
   "0-7":"c41",
+  "0-14":"c47",
   "1-1":"c42", "1-4":"c42", "1-5":"c42", "1-11":"c42",
   "2-1":"c43", "2-9":"c43", "2-11":"c43", "2-13":"c43",
   "3-5":"c44",
